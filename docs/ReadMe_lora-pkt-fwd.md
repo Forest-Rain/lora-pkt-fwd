@@ -27,7 +27,7 @@ lora-pkt-fwd软件包当前实现了如下功能：
 ## 2.1 lora-pkt-fwd软件包功能框图
 lora-pkt-fwd软件包功能框图如下所示
 
-
+![lpf-function-block](images/lpf-function-block.png)
 
 
 ## 2.2 lora-pkt-fwd软件包组织结构
@@ -172,10 +172,10 @@ RT-Thread online packages  --->
 
 - 新增项目->设备管理
    - 网关 -> 添加
-      - ![unicore_add_gateway](images/unicore_add_gateway.png)
+      - ![unicore_add_gateway](images\unicore_add_gateway.png)
    - 节点 -> 添加
 
-![lpf-shell](images/lpf-unicore-udp-cn470s.gif)
+![lpf-shell](images\lpf-unicore-udp-cn470s.gif)
 ### 4.2.3 对接TTN平台测试(EU868)
 登录TTN社区服务器，创建一个lorawan网络应用。TTN添加网关可参考 [https://www.thethingsindustries.com/docs/gateways/adding-gateways/](https://www.thethingsindustries.com/docs/gateways/adding-gateways/)
 
@@ -184,9 +184,9 @@ RT-Thread online packages  --->
       - [https://console.cloud.thethings.network/](https://console.cloud.thethings.network/) 
          - Gateway
             - Add Gateway
-               - ![ttn_add_gateway](images/ttn_add_gateway.png)
+               - ![ttn_add_gateway](images\ttn_add_gateway.png)
 
-![lpf-shell](images/lpf-ttn-udp-eu868.gif)
+![lpf-shell](images\lpf-ttn-udp-eu868.gif)
 
 # 5 问题和建议
 
