@@ -22,6 +22,9 @@ lora-pkt-fwd软件包当前实现了如下功能：
    - 本地直接配置，可通过本地shell直接配置网关参数
       - 支持本地参数掉电存储与恢复、恢复出厂设置等
    - JSON配置文件，可以通过JSON配置网关工作参数
+- 当前测试的IDE
+   - [x] MDK5.29
+   - [x] RT-Thread Studio 2.x
 
 # 2 lora-pkt-fwd软件包概述
 ## 2.1 lora-pkt-fwd软件包功能框图
