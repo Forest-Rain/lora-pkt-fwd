@@ -989,7 +989,7 @@ int lpf_init(void)
     }
     else
     {
-        MSG("lpf auto start disable or had started\n");
+        MSG("lpf main thread create had created\n");
     }
     return 0;
 }
