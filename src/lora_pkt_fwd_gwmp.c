@@ -46,7 +46,6 @@ Maintainer: Michael Coracin
 #include <pthread.h>
 
 #include "jitqueue.h"
-#include "timersync.h"
 #include "parson.h"
 #include "base64.h"
 #include "loragw_hal.h"
@@ -66,6 +65,17 @@ Maintainer: Michael Coracin
 
 #define LOG_TAG     "lpf.gwmp"
 #include "lora_pkt_fwd_dbg.h"
+
+ /*
+ * Arm Compiler 4/5/6 (armclang)
+ */
+#if defined ( __CC_ARM ) || ( defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050))
+ /* Define missing access() modes. */
+#define F_OK 0
+#define W_OK 2
+#define R_OK 4 /* Test for read permission.  */
+#define X_OK 6
+#endif
 
 #define MSG(args...)                  LPF_DEBUG_LOG(LPF_DBG_GWMP, LOG_LVL_INFO, args)
 #define MSG_DEBUG(args...)            LPF_DEBUG_LOG(LPF_DBG_GWMP, LOG_LVL_DBG, args) 
@@ -637,7 +647,7 @@ static int parse_SX130x_configuration(const char * conf_file) {
                 case 500000: ifconf.bandwidth = BW_500KHZ; break;
                 case 250000: ifconf.bandwidth = BW_250KHZ; break;
                 case 125000: ifconf.bandwidth = BW_125KHZ; break;
-                default: ifconf.bandwidth = BW_UNdefined;
+                default: ifconf.bandwidth = BW_UNDEFINED;
             }
             sf = (uint32_t)json_object_dotget_number(conf_obj, "chan_Lora_std.spread_factor");
             switch(sf) {
@@ -649,7 +659,7 @@ static int parse_SX130x_configuration(const char * conf_file) {
                 case 10: ifconf.datarate = DR_LORA_SF10; break;
                 case 11: ifconf.datarate = DR_LORA_SF11; break;
                 case 12: ifconf.datarate = DR_LORA_SF12; break;
-                default: ifconf.datarate = DR_UNdefined;
+                default: ifconf.datarate = DR_UNDEFINED;
             }
             val = json_object_dotget_value(conf_obj, "chan_Lora_std.implicit_hdr");
             if (json_value_get_type(val) == JSONBoolean) {
@@ -714,17 +724,11 @@ static int parse_SX130x_configuration(const char * conf_file) {
             if ((bw == 0) && (fdev != 0)) {
                 bw = 2 * fdev + ifconf.datarate;
             }
-            if      (bw == 0)      ifconf.bandwidth = BW_UNdefined;
-#if 0 /* TODO */
-            else if (bw <= 7800)   ifconf.bandwidth = BW_7K8HZ;
-            else if (bw <= 15600)  ifconf.bandwidth = BW_15K6HZ;
-            else if (bw <= 31200)  ifconf.bandwidth = BW_31K2HZ;
-            else if (bw <= 62500)  ifconf.bandwidth = BW_62K5HZ;
-#endif
+            if      (bw == 0)      ifconf.bandwidth = BW_UNDEFINED;
             else if (bw <= 125000) ifconf.bandwidth = BW_125KHZ;
             else if (bw <= 250000) ifconf.bandwidth = BW_250KHZ;
             else if (bw <= 500000) ifconf.bandwidth = BW_500KHZ;
-            else ifconf.bandwidth = BW_UNdefined;
+            else ifconf.bandwidth = BW_UNDEFINED;
 
             MSG("INFO: FSK channel> radio %i, IF %i Hz, %u Hz bw, %u bps datarate\n", ifconf.rf_chain, ifconf.freq_hz, bw, ifconf.datarate);
         }
@@ -965,7 +969,6 @@ int lpf_init(void)
 {
     if( lpf_main_thread.entry == RT_NULL )
     {
-        //rt_thread_t tid = rt_thread_create("lora_pkt_fwd", lpf_thread_entry, NULL, 8192, 15, 5);
         rt_err_t result = rt_thread_init(&lpf_main_thread,  
                             "lpf-main",                    
                             lpf_thread_entry, 
