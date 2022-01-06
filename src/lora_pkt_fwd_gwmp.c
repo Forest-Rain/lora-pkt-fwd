@@ -141,6 +141,10 @@ Maintainer: Michael Coracin
 #define DEFAULT_BEACON_POWER        14
 #define DEFAULT_BEACON_INFODESC     0
 
+/* RTT's clock_time not support to CLOCK_MONOTONIC at current */
+#undef CLOCK_MONOTONIC
+#define CLOCK_MONOTONIC             CLOCK_REALTIME
+
 struct lpf_conf_srv_s lpf_conf_srv;
 const struct lpf_conf_srv_s lpf_conf_srv_default[LPF_SUPPORTED_NETWORK_SERVER_NUMS] =
 {
